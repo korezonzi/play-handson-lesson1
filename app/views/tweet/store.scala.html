@@ -1,0 +1,19 @@
+@import controllers.tweet.TweetFormData
+@*暗黙パラメーターを渡す(Playではトークンが必要、CSRFトークン関連で必要)*@
+@*implicit書くと、全てがimplicitになる*@
+@(form: Form[TweetFormData])(implicit messageProvider: MessagesProvider, requestHeader: RequestHeader)
+
+@main("登録画面") {
+  <h1>登録画面です。</h1>
+  @helper.form(action = controllers.tweet.routes.TweetController.store()) {
+    @*CSRFトークンの生成ヘルパーを呼び出す処理*@
+    @*いい感じにトークンが用意される*@
+    @helper.CSRF.formField
+    @*content:自由記述 -> textareaに変更*@
+    @helper.textarea(form("content"),
+      'rows -> 7, 'cols -> 40,
+      '_label -> "ツイート" ,'_showConstraints -> false
+    )
+    <input type="submit" value="登録">
+  }
+}
